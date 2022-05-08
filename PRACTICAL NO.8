@@ -1,0 +1,217 @@
+#A Dictionary stores keywords and their meanings. Provide facility for adding
+new. keywords, deleting keywords, updating values of any entry. Provide facility to
+display. whole data sorted in ascending/ descending order. Also, find how many
+maximum comparisons may require for finding any keyword. Use the Height balance
+tree and find the complexity for finding a keyword.
+
+
+
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<cstdlib>
+using namespace std;
+int op;
+int cnt=0;
+class node
+{
+public:
+char word[50];
+char mean[50];
+class node*left;
+class node*right;
+};
+class BT
+{
+public:
+node *root;
+BT()
+    {
+        root=NULL;
+        
+    }
+
+void create();
+node*insert(node*,node*);
+void inorder(node*);
+void preorder(node*);
+void postorder(node*);
+void search(node*,char[]);
+void modify(node*,char []);
+};
+void BT::create()
+{
+int op;
+node*temp;
+do
+{
+temp = new node;
+cout<<"\nEnter A Keyword:";
+cin>>temp->word;
+cout<<"\nEnter Meaning:";
+cin>>temp->mean;
+temp->left=temp->right = NULL;
+if(root == NULL)
+{
+root = temp;
+}
+else
+{
+    root=insert(root,temp);
+} 
+cout<<"\nDo u want to insert again : ";
+cin>>op;
+}
+while(op == 1);
+}
+node* BT::insert(node *root,node*temp)
+{
+if(strcmp (temp->word, root->word) < 0 )
+{
+    if(root->left == NULL)
+    root->left = temp;
+    else
+    insert(root->left,temp);
+}
+else
+{ 
+    if(root->right == NULL)
+    root->right = temp;
+    else
+    insert(root->right,temp);
+}
+return root;
+}
+void BT::inorder(node *temp)
+{
+if( temp!= NULL)
+   {
+       inorder(temp->left);
+       cout<<temp->word<<"->"<<temp->mean<<",";
+       inorder(temp->right);
+   }
+}
+void BT::preorder(node *temp)
+{
+    if( temp!= NULL)
+    { 
+    cout<<temp->word<<"->"<<temp->mean<<",";
+    preorder(temp->left);
+    preorder(temp->right);
+    }
+}
+void BT::postorder(node *temp)
+{
+    if( temp!= NULL)
+    { 
+    postorder(temp->left);
+    postorder(temp->right);
+    cout<<temp->word<<"->"<<temp->mean<<",";
+    }
+}
+void BT::search(node *temp,char src[])
+{
+if(temp != NULL)
+{
+
+if(strcmp (temp->word,src) == 0)
+{
+cout<<"\n Word Found"; 
+cout<<"\n Word : "<<temp->word; 
+cout<<"\n meaning: "<<temp->mean;
+cnt++;
+}
+else
+{
+if((strcmp(temp->word, src)) <0)
+{
+search(temp->right, src);
+cnt++;
+}
+else if((strcmp(temp->word, src)) > 0)
+   {
+    search(temp->left, src);
+    cnt++;
+   }
+}
+}
+else
+cout<<"\n Word Not Found";
+cout<<"\ntotal number of comparisons to search an elements is: "<<cnt;
+}
+void BT::modify(node *temp, char src[])
+{
+	if(temp!=NULL)
+	{
+		if((strcmp(temp->word,src))==0)
+		{
+			cout<<"word found."<<endl;
+			cout<<"Enter the new meaning of the word:"<<temp->word;
+			cin>>temp->mean;
+		}
+		else if((strcmp(temp->word,src))!=0)
+		{
+			if((strcmp(temp->word,src))<0)
+			{
+				modify(temp->right,src);
+				
+			}
+	        else if((strcmp(temp->word,src))>0)
+	        {
+	        	modify(temp->left,src);
+			}
+		}
+	}
+	else
+	{
+		cout<<"Word not found."<<endl;
+	}
+}
+
+int main()
+{
+BT b; 
+char src[100];
+while(1)
+{
+cout<<"\n";
+cout<<"\n 1. Insert Binary Search Tree";
+cout<<"\n 2. Display Inorder, preorder and postorder ";
+cout<<"\n 3. Search The Word ";
+cout<<"\n 4. Modify maning of a word";
+cout<<"\n 5.Exit"; 
+cout<<"\n Enter your choice:";
+cin>>op;
+switch(op)
+{
+case 1:
+   b.create(); 
+   break;
+case 2:
+cout<<"\n Inorder: "; 
+b. inorder (b.root);
+cout<<"\n Preorder : ";
+b.preorder (b.root); 
+cout<<"\n Postorder: ";
+b.postorder (b.root);
+break;
+case 3:
+cnt=0;
+cout<<"\n Enter The Word Want To Search : ";
+cin>>src;
+b.search(b.root,src);
+break;
+case 4:
+cout<<"\n Enter The Word Want To Modify ";
+cin>>src; 
+b.modify(b.root, src);
+break;
+case 5:
+exit(0);
+break;
+default:
+cout<<"\n Invalid option";
+break;
+}
+}
+}
