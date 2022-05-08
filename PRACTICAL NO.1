@@ -1,0 +1,62 @@
+                   #Consider telephone book database of N clients. Make use of a hash table
+                  implementation to quickly look up the client‘s telephone number. Make use of two
+                  collision handling techniques and compare them using a number of comparisons
+                  required to find a set of telephone numbers
+
+
+
+#include<iostream>
+#include<cstring>
+#define max 10
+using namespace std;
+
+struct client
+{
+	int phn_no;
+	char name[10];
+
+};//end of structure 	
+
+class hashtable
+{
+	client ht[max];
+	
+	public:
+		hashtable()	//constructor
+		{
+			for(int i=0;i<max;i++)
+			{
+				ht[i].phn_no=0;
+				
+			}
+		}		
+		void insert();
+		void display();
+		int search(int);
+		int del(int);
+		int hash(int);
+};//end of class
+
+void hashtable::insert()
+{
+	client c;
+	int i;
+	char C;
+	do
+	{
+		cout<<"\n Enter Phone Number:";
+		cin>>c.phn_no;
+		i=hash(c.phn_no);
+	
+		if(ht[i].phn_no==0)
+		{
+			ht[i]=c;
+		}
+		else
+		{
+			for(int i=i++;i%max!=i;i++)
+			{
+				ht[i]=c;
+				break;
+			}
+		}
